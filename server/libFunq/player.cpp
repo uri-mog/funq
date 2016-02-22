@@ -62,7 +62,7 @@ knowledge of the CeCILL v2.1 license and that you accept its terms.
 using namespace ObjectPath;
 
 template<class T>
-void mouse_click(T * w, const QPoint & pos) {
+void mouse_click(T * w, const QPoint & pos, int modifiers=Qt::NoModifier) {
     QPoint global_pos = w->mapToGlobal(pos);
     qApp->postEvent(w,
         new QMouseEvent(QEvent::MouseButtonPress,
@@ -70,7 +70,7 @@ void mouse_click(T * w, const QPoint & pos) {
                         global_pos,
                         Qt::LeftButton,
                         Qt::NoButton,
-                        Qt::NoModifier));
+                        QFlags<Qt::KeyboardModifier>(QFlag(modifiers))));
     qApp->postEvent(w,
         new QMouseEvent(QEvent::MouseButtonRelease,
                         pos,
@@ -587,7 +587,7 @@ QtJson::JsonObject Player::model_item_action(const QtJson::JsonObject & command)
     } else if (itemaction == "edit") {
         emit emit_model_item_action(itemaction, ctx.widget, index);
     } else if (itemaction == "click") {
-        mouse_click(ctx.widget->viewport(), cursorPosition);
+        mouse_click(ctx.widget->viewport(), cursorPosition, command["modifiers"].toInt());
     } else if (itemaction == "doubleclick") {
         mouse_dclick(ctx.widget->viewport(), cursorPosition);
     } else {

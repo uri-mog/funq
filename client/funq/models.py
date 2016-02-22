@@ -331,7 +331,7 @@ class ModelItem(TreeItem):
     itempath = None
     check_state = None
 
-    def _action(self, itemaction, origin=None, offset_x=None, offset_y=None):
+    def _action(self, itemaction, origin=None, offset_x=None, offset_y=None,modifiers=0):
         """ Send the 'model_item_action' action """
         self.client.send_command('model_item_action',
                                  oid=self.viewid,
@@ -340,7 +340,8 @@ class ModelItem(TreeItem):
                                  origin=origin,
                                  offset_x=offset_x,
                                  offset_y=offset_y,
-                                 itempath=self.itempath)
+                                 itempath=self.itempath,
+                                 modifiers=modifiers)
 
     def is_checkable(self):
         """Returns True if the item is checkable"""
@@ -362,7 +363,7 @@ class ModelItem(TreeItem):
         """
         self._action("edit")
 
-    def click(self, origin="center", offset_x=0, offset_y=0):
+    def click(self, origin="center", offset_x=0, offset_y=0,modifiers=0):
         """
         Click on this item.
 
@@ -372,9 +373,11 @@ class ModelItem(TreeItem):
                          Negative value allowed.
         :param offset_y: y position relative to the origin.
                          Negative value allowed.
+        :param modifiers: Keyboard modifiers flags
+                        (should be a combination of Qt::KeyboardModifiers).
         """
         self._action(
-            "click", origin=origin, offset_x=offset_x, offset_y=offset_y
+            "click", origin=origin, offset_x=offset_x, offset_y=offset_y, modifiers=modifiers
         )
 
     def dclick(self, origin="center", offset_x=0, offset_y=0):
